@@ -11,6 +11,7 @@ import SplashScreen from 'react-native-splash-screen';
 import theme from './global/theme';
 import topography from './global/typography';
 import BaseScreen from './global/baseScreen';
+import CustomButton from './components/CustomButton';
 
 function App(): JSX.Element {
   useEffect(() => {
@@ -20,14 +21,9 @@ function App(): JSX.Element {
   return (
     <BaseScreen>
       <View style={styles.container}>
-        <Text style={styles.title}>Welcome VR Wallet</Text>
-        <Text style={[topography.h1, styles.subtitle]}>H1</Text>
-        <Text style={[topography.h2, styles.subtitle]}>H2</Text>
-        <Text style={[topography.h3, styles.subtitle]}>H3</Text>
-        <Text style={[topography.h4, styles.subtitle]}>H4</Text>
-        <Text style={[topography.h5, styles.subtitle]}>H5</Text>
-        <Text style={[topography.paragraph, styles.subtitle]}>Paragraph</Text>
-        <Text style={[topography.small, styles.subtitle]}>Small</Text>
+        <Text style={[topography.h1, styles.title]}>Wallet Test</Text>
+        <CustomButton textButton="meus cartões" typeButton="primary" />
+        <CustomButton textButton="cadastrar cartão" typeButton="secondary" />
       </View>
     </BaseScreen>
   );
@@ -41,9 +37,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    color: theme.baseColor.blueLight,
-    marginBottom: 10,
+    color: theme.textColor.white,
     fontFamily: 'Roboto',
+    marginBottom: 30,
   },
   subtitle: {
     color: theme.baseColor.greenLight,
