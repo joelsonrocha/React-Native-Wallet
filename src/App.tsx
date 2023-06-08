@@ -6,67 +6,47 @@
  */
 
 import React, {useEffect} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-
-import {Colors, Header} from 'react-native/Libraries/NewAppScreen';
+import theme from './global/theme';
+import topography from './global/typography';
+import BaseScreen from './global/baseScreen';
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
   useEffect(() => {
     SplashScreen.hide();
   });
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Text>alguma coisa</Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+    <BaseScreen>
+      <View style={styles.container}>
+        <Text style={styles.title}>Welcome VR Wallet</Text>
+        <Text style={[topography.h1, styles.subtitle]}>H1</Text>
+        <Text style={[topography.h2, styles.subtitle]}>H2</Text>
+        <Text style={[topography.h3, styles.subtitle]}>H3</Text>
+        <Text style={[topography.h4, styles.subtitle]}>H4</Text>
+        <Text style={[topography.h5, styles.subtitle]}>H5</Text>
+        <Text style={[topography.paragraph, styles.subtitle]}>Paragraph</Text>
+        <Text style={[topography.small, styles.subtitle]}>Small</Text>
+      </View>
+    </BaseScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  container: {
+    flex: 1,
+    backgroundColor: theme.baseColor.blueDark,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  title: {
+    color: theme.baseColor.blueLight,
+    marginBottom: 10,
+    fontFamily: 'Roboto',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  subtitle: {
+    color: theme.baseColor.greenLight,
   },
 });
 
