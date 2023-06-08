@@ -14,15 +14,22 @@ import topography from '../../global/typography';
 type ButtonProps = {
   typeButton: string;
   textButton: string;
+  onClick: () => {};
 };
 
-function CustomButton({typeButton, textButton}: ButtonProps): JSX.Element {
+function CustomButton({
+  typeButton,
+  textButton,
+  onClick,
+}: ButtonProps): JSX.Element {
   useEffect(() => {
     SplashScreen.hide();
   });
 
   return (
-    <TouchableOpacity style={[styles.container, styles[typeButton]]}>
+    <TouchableOpacity
+      style={[styles.container, styles[typeButton]]}
+      onPress={onClick}>
       <Text style={[topography.h5, styles[typeButton], styles.text]}>
         {textButton}
       </Text>
