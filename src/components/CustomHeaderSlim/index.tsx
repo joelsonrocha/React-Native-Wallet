@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {SvgXml} from 'react-native-svg';
-import {ArrowBack} from '../../assets';
+import {ArrowBackIcon} from '../../assets';
 import topography from '../../global/typography';
 import theme from '../../global/theme';
 
@@ -19,7 +19,7 @@ const CustomHeaderSlim = ({title}: CustomHeaderSlimProps) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={handleGoBack} style={styles.buttonContainer}>
-        <SvgXml xml={ArrowBack} width="100%" />
+        <SvgXml xml={ArrowBackIcon} />
       </TouchableOpacity>
       <Text style={[styles.textContainer, topography.h3]}>{title}</Text>
     </View>
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    borderColor: 'red',
     height: 24,
     marginTop: 21,
     position: 'relative',

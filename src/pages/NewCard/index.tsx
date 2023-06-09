@@ -20,9 +20,11 @@ function NewCard(): JSX.Element {
 
   return (
     <BaseScreen>
-      <CustomHeaderSlim title="cadastro" />
       <View style={styles.container}>
-        <Text style={[topography.h1, styles.title]}>Novo Cartão</Text>
+        <CustomHeaderSlim title="cadastro" />
+        <View style={styles.body}>
+          <Text style={[topography.h1, styles.title]}>Novo Cartão</Text>
+        </View>
       </View>
     </BaseScreen>
   );
@@ -30,10 +32,10 @@ function NewCard(): JSX.Element {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column',
     flex: 1,
     backgroundColor: theme.baseColor.blueDark,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
   title: {
     color: theme.textColor.white,
@@ -42,6 +44,10 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: theme.baseColor.greenLight,
+  },
+  body: {
+    flex: 1,
+    alignItems: 'center',
   },
 });
 

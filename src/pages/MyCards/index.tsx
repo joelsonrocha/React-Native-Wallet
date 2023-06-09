@@ -5,33 +5,30 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-import BaseScreen from '../../global/baseScreen';
 import topography from '../../global/typography';
 import theme from '../../global/theme';
-
+import CustomHeaderFat from '../../components/CustomHeaderFat';
 function MyCards(): JSX.Element {
-  useEffect(() => {
-    SplashScreen.hide();
-  });
-
   return (
-    <BaseScreen>
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <CustomHeaderFat title="Wallet Test" subtitle="Meus cartões" />
+      <View style={styles.body}>
         <Text style={[topography.h1, styles.title]}>Meus Cartões</Text>
       </View>
-    </BaseScreen>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column',
     flex: 1,
     backgroundColor: theme.baseColor.blueDark,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    borderWidth: 1,
+    borderColor: 'green',
   },
   title: {
     color: theme.textColor.white,
@@ -40,6 +37,11 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     color: theme.baseColor.greenLight,
+  },
+  body: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 

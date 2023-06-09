@@ -21,7 +21,11 @@ export default function Routes() {
           component={Home}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="MyCards" component={MyCards} />
+        <Stack.Screen
+          name="MyCards"
+          component={MyCards}
+          options={{headerShown: false}}
+        />
         <Stack.Screen
           name="NewCard"
           component={NewCard}
