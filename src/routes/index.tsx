@@ -22,7 +22,11 @@ export default function Routes() {
           options={{headerShown: false}}
         />
         <Stack.Screen name="MyCards" component={MyCards} />
-        <Stack.Screen name="NewCard" component={NewCard} />
+        <Stack.Screen
+          name="NewCard"
+          component={NewCard}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

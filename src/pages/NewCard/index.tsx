@@ -11,6 +11,7 @@ import SplashScreen from 'react-native-splash-screen';
 import BaseScreen from '../../global/baseScreen';
 import topography from '../../global/typography';
 import theme from '../../global/theme';
+import CustomHeaderSlim from '../../components/CustomHeaderSlim';
 
 function NewCard(): JSX.Element {
   useEffect(() => {
@@ -19,6 +20,7 @@ function NewCard(): JSX.Element {
 
   return (
     <BaseScreen>
+      <CustomHeaderSlim title="cadastro" />
       <View style={styles.container}>
         <Text style={[topography.h1, styles.title]}>Novo Cartão</Text>
       </View>
