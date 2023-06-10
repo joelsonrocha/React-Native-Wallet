@@ -5,9 +5,8 @@
  * @format
  */
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import {StyleSheet, TouchableOpacity, Text} from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
 import theme from '../../global/theme';
 import topography from '../../global/typography';
 
@@ -21,15 +20,13 @@ function CustomButton({
   typeButton,
   textButton,
   onClick,
+  ...restProps
 }: ButtonProps): JSX.Element {
-  useEffect(() => {
-    SplashScreen.hide();
-  });
-
   return (
     <TouchableOpacity
       style={[styles.container, styles[typeButton]]}
-      onPress={onClick}>
+      onPress={onClick}
+      {...restProps}>
       <Text style={[topography.h5, styles[typeButton], styles.text]}>
         {textButton}
       </Text>
@@ -53,6 +50,10 @@ const styles = StyleSheet.create({
   secondary: {
     backgroundColor: theme.baseColor.greenLight,
     color: theme.baseColor.blueDark,
+  },
+  disabled: {
+    backgroundColor: theme.baseColor.greyLight,
+    color: theme.textColor.grey,
   },
   text: {
     backgroundColor: 'transparent',
