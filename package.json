@@ -8,18 +8,25 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "api": "json-server --watch db.json --port 3004"
+    "api": "json-server --watch db.json --port 3004",
+    "clean:android": "rm -rf android/app/build && rm -rf android/build && rm -rf android/.gradle && rm -rf android/build.gradle-e && cd android && ./gradlew clean",
+    "clean:ios": "rm -rf ios/build && rm -rf ios/Podfile.lock && rm -rf ios/Pods && rm -rf ios/VRWallet.xcworkspace",
+    "build": "yarn && yarn build:android && yarn build:ios",
+    "build:ios": "cd ios/ && pod install",
+    "clean": "yarn cache clean -f"
   },
   "dependencies": {
-    "@react-navigation/native": "^6.1.6",
-    "@react-navigation/native-stack": "^6.9.12",
-    "axios": "^1.4.0",
+    "@react-navigation/native": "6.1.6",
+    "@react-navigation/native-stack": "6.9.12",
+    "axios": "1.4.0",
     "react": "18.2.0",
     "react-native": "0.71.10",
-    "react-native-safe-area-context": "^4.5.3",
-    "react-native-screens": "^3.20.0",
-    "react-native-splash-screen": "^3.3.0",
-    "react-native-svg": "^13.9.0"
+    "react-native-gesture-handler": "1.10.3",
+    "react-native-reanimated": "2.2.0",
+    "react-native-safe-area-context": "4.5.3",
+    "react-native-screens": "3.20.0",
+    "react-native-splash-screen": "3.3.0",
+    "react-native-svg": "13.9.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

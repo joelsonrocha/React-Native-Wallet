@@ -15,7 +15,7 @@ import {SvgXml} from 'react-native-svg';
 import {CameraIcon} from '../../assets';
 import CustomButton from '../../components/CustomButton';
 import {saveCardService} from '../../services';
-import getCustomStyle from '../../global/getCardColor';
+import CreditCard from '../../components/CreditCard';
 
 function NewCard(): JSX.Element {
   const [cardNumber, setCardNumber] = useState('2345 3456 4556 3456');
@@ -24,8 +24,6 @@ function NewCard(): JSX.Element {
   const [securityCode, setSecurityCode] = useState('123');
   const [disableButton, setDisableButton] = useState(true);
   const [createdNewCard, setCreatedNewCard] = useState(true);
-
-  const cardStyle = getCustomStyle();
 
   const saveCard = async () => {
     if (cardNumber && personName && validate && securityCode) {
@@ -142,32 +140,11 @@ function NewCard(): JSX.Element {
               <Text style={[topography.h4, styles.title]}>
                 cartão cadastrado com sucesso
               </Text>
-              <View
-                style={[styles.creditCard, cardStyle.customStyle.container]}>
-                <Text
-                  style={[
-                    topography.h5,
-                    styles.title,
-                    cardStyle.customStyle.cardData,
-                  ]}>
-                  {cardStyle.title}
-                </Text>
-                <Text
-                  style={[
-                    topography.paragraph,
-                    cardStyle.customStyle.cardData,
-                  ]}>
-                  {personName}
-                </Text>
-                <Text
-                  style={[topography.small, cardStyle.customStyle.cardData]}>
-                  {cardNumber}
-                </Text>
-                <Text
-                  style={[topography.small, cardStyle.customStyle.cardData]}>
-                  Validade {validate}
-                </Text>
-              </View>
+              <CreditCard
+                cardNumber={cardNumber}
+                personName={personName}
+                validate={`Validade ${validate}`}
+              />
               <CustomButton
                 textButton="avançar"
                 onClick={() => handleContinue()}
@@ -252,14 +229,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   success: {},
-  creditCard: {
-    width: 300,
-    height: 180,
-    borderRadius: 16,
-    paddingTop: 30,
-    paddingLeft: 15,
-    marginBottom: 30,
-  },
 });
 
 export default NewCard;
