@@ -5,7 +5,7 @@
  * @format
  */
 
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import topography from '../../global/typography';
 import theme from '../../global/theme';
@@ -13,10 +13,12 @@ import CustomHeaderFat from '../../components/CustomHeaderFat';
 import {getCardService} from '../../services';
 import {useNavigation} from '@react-navigation/native';
 function MyCards(): JSX.Element {
+  const [cards, setCards] = useState<CardData[]>([]);
   const navigation = useNavigation();
   const getCards = useCallback(async () => {
     try {
       const result = await getCardService.getCards();
+      setCards(result);
       console.log('cartões carregados', result);
     } catch (error) {
       console.log('Erro ao buscar cartões', error);
@@ -29,6 +31,13 @@ function MyCards(): JSX.Element {
     });
     return unsubscribe;
   }, [navigation, getCards]);
+
+  useEffect(() => {
+    console.log('cards com interface', cards);
+    cards.map(item => {
+      console.log('cards com interface item', item);
+    });
+  }, [cards]);
 
   return (
     <View style={styles.container}>
