@@ -11,8 +11,9 @@ import theme from '../../global/theme';
 import topography from '../../global/typography';
 
 type ButtonProps = {
-  typeButton: string;
+  typeButton: 'primary' | 'secondary' | 'disabled';
   textButton: string;
+  disabled?: boolean;
   onClick: () => {};
 };
 
@@ -22,12 +23,17 @@ function CustomButton({
   onClick,
   ...restProps
 }: ButtonProps): JSX.Element {
+  const buttonStyles = {
+    primary: styles.primary,
+    secondary: styles.secondary,
+    disabled: styles.disabled,
+  };
   return (
     <TouchableOpacity
-      style={[styles.container, styles[typeButton]]}
+      style={[styles.container, buttonStyles[typeButton]]}
       onPress={onClick}
       {...restProps}>
-      <Text style={[topography.h5, styles[typeButton], styles.text]}>
+      <Text style={[topography.h5, buttonStyles[typeButton], styles.text]}>
         {textButton}
       </Text>
     </TouchableOpacity>
