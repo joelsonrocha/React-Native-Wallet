@@ -5,12 +5,24 @@
  * @format
  */
 
-import React from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import topography from '../../global/typography';
 import theme from '../../global/theme';
 import CustomHeaderFat from '../../components/CustomHeaderFat';
+import {getCardService} from '../../services';
 function MyCards(): JSX.Element {
+  const getCards = useCallback(async () => {
+    try {
+      const result = await getCardService.getCards();
+      console.log('cartões carregados', result);
+    } catch (error) {
+      console.log('Erro ao buscar cartões', error);
+    }
+  }, []);
+  useEffect(() => {
+    getCards();
+  }, [getCards]);
   return (
     <View style={styles.container}>
       <CustomHeaderFat title="Wallet Test" subtitle="Meus cartões" />

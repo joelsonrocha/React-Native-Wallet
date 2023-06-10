@@ -14,25 +14,34 @@ import CustomHeaderSlim from '../../components/CustomHeaderSlim';
 import {SvgXml} from 'react-native-svg';
 import {CameraIcon} from '../../assets';
 import CustomButton from '../../components/CustomButton';
+import {saveCardService} from '../../services';
 
 function NewCard(): JSX.Element {
   const [cardNumber, setCardNumber] = useState('');
   const [personName, setPersonName] = useState('');
-  const [dueDate, setDueDate] = useState('');
+  const [validate, setValidate] = useState('');
   const [securityCode, setSecurityCode] = useState('');
   const [disableButton, setDisableButton] = useState(true);
 
   const saveCard = async () => {
+    if (cardNumber && personName && validate && securityCode) {
+      await saveCardService.saveCard({
+        number: cardNumber,
+        cvv: securityCode,
+        name: personName,
+        validade: validate,
+      });
+    }
     console.log('salvar cartão');
   };
 
   useEffect(() => {
-    if (cardNumber && personName && dueDate && securityCode) {
+    if (cardNumber && personName && validate && securityCode) {
       setDisableButton(false);
     } else {
       setDisableButton(true);
     }
-  }, [cardNumber, personName, dueDate, securityCode]);
+  }, [cardNumber, personName, validate, securityCode]);
 
   return (
     <BaseScreen>
@@ -79,8 +88,8 @@ function NewCard(): JSX.Element {
               <Text style={[topography.small, styles.label]}>Vencimento</Text>
               <TextInput
                 style={[topography.paragraph, styles.input, styles.miniInput]}
-                onChangeText={setDueDate}
-                value={dueDate}
+                onChangeText={setValidate}
+                value={validate}
                 placeholder="00/00"
                 keyboardType="numeric"
                 maxLength={16}
