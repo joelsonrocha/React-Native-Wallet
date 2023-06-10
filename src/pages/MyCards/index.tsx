@@ -11,7 +11,9 @@ import topography from '../../global/typography';
 import theme from '../../global/theme';
 import CustomHeaderFat from '../../components/CustomHeaderFat';
 import {getCardService} from '../../services';
+import {useNavigation} from '@react-navigation/native';
 function MyCards(): JSX.Element {
+  const navigation = useNavigation();
   const getCards = useCallback(async () => {
     try {
       const result = await getCardService.getCards();
@@ -20,9 +22,14 @@ function MyCards(): JSX.Element {
       console.log('Erro ao buscar cartões', error);
     }
   }, []);
+
   useEffect(() => {
-    getCards();
-  }, [getCards]);
+    const unsubscribe = navigation.addListener('focus', () => {
+      getCards();
+    });
+    return unsubscribe;
+  }, [navigation, getCards]);
+
   return (
     <View style={styles.container}>
       <CustomHeaderFat title="Wallet Test" subtitle="Meus cartões" />

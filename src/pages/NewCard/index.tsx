@@ -15,14 +15,16 @@ import {SvgXml} from 'react-native-svg';
 import {CameraIcon} from '../../assets';
 import CustomButton from '../../components/CustomButton';
 import {saveCardService} from '../../services';
+import getCardColor from '../../global/getCardColor';
 
 function NewCard(): JSX.Element {
-  const [cardNumber, setCardNumber] = useState('');
-  const [personName, setPersonName] = useState('');
-  const [validate, setValidate] = useState('');
-  const [securityCode, setSecurityCode] = useState('');
+  const [cardNumber, setCardNumber] = useState('2345 3456 4556 3456');
+  const [personName, setPersonName] = useState('Nicolas Rocha');
+  const [validate, setValidate] = useState('12/25');
+  const [securityCode, setSecurityCode] = useState('123');
   const [disableButton, setDisableButton] = useState(true);
-
+  const [createdNewCard, setCreatedNewCard] = useState(true);
+  const [colorData, setColorData] = useState<any>();
   const saveCard = async () => {
     if (cardNumber && personName && validate && securityCode) {
       await saveCardService.saveCard({
@@ -31,9 +33,18 @@ function NewCard(): JSX.Element {
         name: personName,
         validade: validate,
       });
+      setCreatedNewCard(true);
     }
     console.log('salvar cartão');
   };
+
+  const handleContinue = async () => {
+    console.log('handleContinue');
+  };
+
+  useEffect(() => {
+    setColorData(getCardColor());
+  }, []);
 
   useEffect(() => {
     if (cardNumber && personName && validate && securityCode) {
@@ -49,72 +60,111 @@ function NewCard(): JSX.Element {
         <CustomHeaderSlim title="cadastro" />
         <View style={styles.body}>
           <Text style={[topography.h1, styles.title]}>Wallet Test</Text>
-
-          <View style={styles.inputContainer}>
-            <Text style={[topography.small, styles.label]}>
-              Número do cartão
-            </Text>
-            <View style={styles.viewInputCardNumber}>
-              <TextInput
-                style={[
-                  topography.paragraph,
-                  styles.input,
-                  styles.inputCardNumber,
-                ]}
-                onChangeText={setCardNumber}
-                value={cardNumber}
-                keyboardType="numeric"
-                maxLength={16}
-              />
-              <View style={styles.elipse}>
-                <SvgXml xml={CameraIcon} />
+          {!createdNewCard && (
+            <View style={styles.form}>
+              <View style={styles.inputContainer}>
+                <Text style={[topography.small, styles.label]}>
+                  Número do cartão
+                </Text>
+                <View style={styles.viewInputCardNumber}>
+                  <TextInput
+                    style={[
+                      topography.paragraph,
+                      styles.input,
+                      styles.inputCardNumber,
+                    ]}
+                    onChangeText={setCardNumber}
+                    value={cardNumber}
+                    keyboardType="numeric"
+                    maxLength={16}
+                  />
+                  <View style={styles.elipse}>
+                    <SvgXml xml={CameraIcon} />
+                  </View>
+                </View>
               </View>
-            </View>
-          </View>
-          <View style={styles.inputContainer}>
-            <Text style={[topography.small, styles.label]}>
-              Nome do titular do cartão
-            </Text>
-            <TextInput
-              style={[topography.paragraph, styles.input]}
-              onChangeText={setPersonName}
-              value={personName}
-              keyboardType="default"
-              maxLength={16}
-            />
-          </View>
-          <View style={styles.containerMiniIputs}>
-            <View style={styles.inputContainer}>
-              <Text style={[topography.small, styles.label]}>Vencimento</Text>
-              <TextInput
-                style={[topography.paragraph, styles.input, styles.miniInput]}
-                onChangeText={setValidate}
-                value={validate}
-                placeholder="00/00"
-                keyboardType="numeric"
-                maxLength={16}
+              <View style={styles.inputContainer}>
+                <Text style={[topography.small, styles.label]}>
+                  Nome do titular do cartão
+                </Text>
+                <TextInput
+                  style={[topography.paragraph, styles.input]}
+                  onChangeText={setPersonName}
+                  value={personName}
+                  keyboardType="default"
+                  maxLength={16}
+                />
+              </View>
+              <View style={styles.containerMiniIputs}>
+                <View style={styles.inputContainer}>
+                  <Text style={[topography.small, styles.label]}>
+                    Vencimento
+                  </Text>
+                  <TextInput
+                    style={[
+                      topography.paragraph,
+                      styles.input,
+                      styles.miniInput,
+                    ]}
+                    onChangeText={setValidate}
+                    value={validate}
+                    placeholder="00/00"
+                    keyboardType="numeric"
+                    maxLength={16}
+                  />
+                </View>
+                <View style={styles.inputContainer}>
+                  <Text style={[topography.small, styles.label]}>
+                    Código de segurança
+                  </Text>
+                  <TextInput
+                    style={[
+                      topography.paragraph,
+                      styles.input,
+                      styles.miniInput,
+                    ]}
+                    onChangeText={setSecurityCode}
+                    value={securityCode}
+                    placeholder="***"
+                    keyboardType="numeric"
+                    maxLength={16}
+                  />
+                </View>
+              </View>
+              <CustomButton
+                textButton="avançar"
+                onClick={() => saveCard()}
+                typeButton={disableButton ? 'disabled' : 'primary'}
+                disabled={disableButton}
               />
             </View>
-            <View style={styles.inputContainer}>
-              <Text style={[topography.small, styles.label]}>
-                Código de segurança
+          )}
+          {createdNewCard && (
+            <View style={styles.success}>
+              <Text style={[topography.h4, styles.title]}>
+                cartão cadastrado com sucesso
               </Text>
-              <TextInput
-                style={[topography.paragraph, styles.input, styles.miniInput]}
-                onChangeText={setSecurityCode}
-                value={securityCode}
-                placeholder="***"
-                keyboardType="numeric"
-                maxLength={16}
+              <View style={styles.creditCard}>
+                <Text style={[topography.h5, styles.title]}>
+                  {getCardColor().index === 0 ? 'Black Card' : 'Green Card'}
+                </Text>
+                <Text style={[topography.paragraph, styles.cardData]}>
+                  {personName}
+                </Text>
+                <Text style={[topography.small, styles.cardData]}>
+                  {cardNumber}
+                </Text>
+                <Text style={[topography.small, styles.cardData]}>
+                  Validade {validate}
+                </Text>
+              </View>
+              <CustomButton
+                textButton="avançar"
+                onClick={() => handleContinue()}
+                typeButton={'primary'}
               />
             </View>
-          </View>
-          <CustomButton
-            textButton="avançar"
-            onClick={() => saveCard()}
-            typeButton={disableButton ? 'disabled' : 'primary'}
-            disabled={disableButton}
-          />
+          )}
         </View>
       </View>
     </BaseScreen>
@@ -128,6 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.baseColor.blueDark,
     justifyContent: 'flex-start',
   },
+  form: {},
   title: {
     color: theme.textColor.white,
     fontFamily: 'Roboto',
@@ -189,6 +240,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
+  },
+  success: {},
+  creditCard: {
+    width: 300,
+    height: 180,
+    borderRadius: 16,
+    backgroundColor: getCardColor().color,
+    paddingTop: 30,
+    paddingLeft: 15,
+    marginBottom: 30,
+  },
+  cardData: {
+    color: theme.textColor.white,
   },
 });
 
