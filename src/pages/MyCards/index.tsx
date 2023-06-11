@@ -6,20 +6,27 @@
  */
 
 import React, {useCallback, useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import topography from '../../global/typography';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import theme from '../../global/theme';
 import CustomHeaderFat from '../../components/CustomHeaderFat';
 import {getCardService} from '../../services';
 import {useNavigation} from '@react-navigation/native';
+import CreditCard from '../../components/CreditCard';
+import topography from '../../global/typography';
 function MyCards(): JSX.Element {
   const [cards, setCards] = useState<CardData[]>([]);
+  const [cardToUse, setCardToUse] = useState<CardData>();
   const navigation = useNavigation();
   const getCards = useCallback(async () => {
     try {
       const result = await getCardService.getCards();
       setCards(result);
-      console.log('cartões carregados', result);
     } catch (error) {
       console.log('Erro ao buscar cartões', error);
     }
@@ -32,18 +39,72 @@ function MyCards(): JSX.Element {
     return unsubscribe;
   }, [navigation, getCards]);
 
-  useEffect(() => {
-    console.log('cards com interface', cards);
-    cards.map(item => {
-      console.log('cards com interface item', item);
-    });
+  const prepareCardToUse = useCallback(() => {
+    if (cards.length) {
+      setCardToUse(cards[cards.length - 1]);
+    }
   }, [cards]);
+
+  useEffect(() => {
+    prepareCardToUse();
+  }, [cards, prepareCardToUse]);
+
+  const cardChoose = (item: CardData, index: number) => {
+    const arrayCard = cards;
+    const indexInFront = cards.length - 1;
+    if (index === indexInFront) {
+      return;
+    }
+    const cardFront = arrayCard[indexInFront];
+    console.log('index clicado', index);
+    console.log('escolhi o cartão', item);
+    console.log('cardFront', cardFront);
+    arrayCard[indexInFront] = item;
+    arrayCard[index] = cardFront;
+    setCards([...arrayCard]);
+  };
 
   return (
     <View style={styles.container}>
       <CustomHeaderFat title="Wallet Test" subtitle="Meus cartões" />
       <View style={styles.body}>
-        <Text style={[topography.h1, styles.title]}>Meus Cartões</Text>
+        <View style={styles.cardContainer}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={styles.scrollViewCards}
+            contentContainerStyle={styles.scrollViewContent}>
+            {cards.map((item, index) => {
+              const zIndex = cards.length + index;
+              const bottom = index * 144;
+              const itemStyle = {
+                zIndex: zIndex,
+                bottom: bottom,
+              };
+              return (
+                <TouchableOpacity
+                  key={item.id}
+                  onPress={() => cardChoose(item, index)}>
+                  <CreditCard
+                    cardNumber={item.number}
+                    validate={item.validate}
+                    personName={item.name}
+                    itemStyle={itemStyle}
+                  />
+                </TouchableOpacity>
+              );
+            })}
+          </ScrollView>
+          <View style={styles.useCardArea}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log('usar este cartão', cardToUse);
+              }}>
+              <Text style={[topography.paragraph, styles.textUseCard]}>
+                Usar este cartão
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -70,6 +131,18 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  cardContainer: {marginTop: 50, height: 400},
+  scrollViewContent: {
+    padding: 20,
+  },
+  useCardArea: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 15,
+  },
+  textUseCard: {
+    color: theme.textColor.white,
   },
 });
 

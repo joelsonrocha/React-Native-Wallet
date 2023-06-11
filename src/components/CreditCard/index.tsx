@@ -1,5 +1,5 @@
 import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import topography from '../../global/typography';
 import getCustomStyle from '../../global/getCardColor';
 import theme from '../../global/theme';
@@ -8,11 +8,18 @@ type CreditCardProps = {
   cardNumber: string;
   validate: string;
   personName: string;
+  itemStyle?: ViewStyle;
 };
-const CreditCard = ({cardNumber, validate, personName}: CreditCardProps) => {
+const CreditCard = ({
+  cardNumber,
+  validate,
+  personName,
+  itemStyle,
+}: CreditCardProps) => {
   const cardStyle = getCustomStyle();
   return (
-    <View style={[styles.creditCard, cardStyle.customStyle.container]}>
+    <View
+      style={[styles.creditCard, cardStyle.customStyle.container, itemStyle]}>
       <Text
         style={[topography.h5, styles.title, cardStyle.customStyle.cardData]}>
         {cardStyle.title}
