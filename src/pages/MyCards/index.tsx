@@ -71,7 +71,6 @@ function MyCards(): JSX.Element {
         <View style={styles.cardContainer}>
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={styles.scrollViewCards}
             contentContainerStyle={styles.scrollViewContent}>
             {cards.map((item, index) => {
               const zIndex = cards.length + index;
@@ -88,6 +87,7 @@ function MyCards(): JSX.Element {
                     cardNumber={item.number}
                     validate={item.validate}
                     personName={item.name}
+                    typeCard={item.typeCard}
                     itemStyle={itemStyle}
                   />
                 </TouchableOpacity>

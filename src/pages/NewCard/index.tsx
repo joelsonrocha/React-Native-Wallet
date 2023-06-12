@@ -16,30 +16,59 @@ import {CameraIcon} from '../../assets';
 import CustomButton from '../../components/CustomButton';
 import {saveCardService} from '../../services';
 import CreditCard from '../../components/CreditCard';
+import {useNavigation} from '@react-navigation/native';
 
 function NewCard(): JSX.Element {
-  const [cardNumber, setCardNumber] = useState('2345 3456 4556 3456');
-  const [personName, setPersonName] = useState('Nicolas Rocha');
-  const [validate, setValidate] = useState('12/25');
-  const [securityCode, setSecurityCode] = useState('123');
+  const [cardNumber, setCardNumber] = useState('');
+  const [personName, setPersonName] = useState('');
+  const [validate, setValidate] = useState('');
+  const [securityCode, setSecurityCode] = useState('');
   const [disableButton, setDisableButton] = useState(true);
-  const [createdNewCard, setCreatedNewCard] = useState(true);
+  const [createdNewCard, setCreatedNewCard] = useState<CardData | null>(null);
+  const navigation = useNavigation();
+
+  const typeCreditCard = () => {
+    const typeCard = ['black', 'green'];
+    const ramdomIndex = Math.floor(Math.random() * typeCard.length);
+    return typeCard[ramdomIndex];
+  };
 
   const saveCard = async () => {
     if (cardNumber && personName && validate && securityCode) {
-      await saveCardService.saveCard({
+      setCreatedNewCard({
         number: cardNumber,
         cvv: securityCode,
         name: personName,
-        validade: validate,
+        validate: validate,
+        typeCard: typeCreditCard() as 'black' | 'green',
       });
-      setCreatedNewCard(true);
     }
-    console.log('salvar cartão');
   };
+
+  useEffect(() => {
+    if (
+      createdNewCard?.cvv &&
+      createdNewCard.name &&
+      createdNewCard.number &&
+      createdNewCard.name
+    ) {
+      async function saveData() {
+        if (createdNewCard) {
+          await saveCardService.saveCard(createdNewCard);
+        }
+      }
+      saveData();
+    }
+  }, [createdNewCard]);
 
   const handleContinue = async () => {
     console.log('handleContinue');
+    setCreatedNewCard(null);
+    setCardNumber('');
+    setPersonName('');
+    setValidate('');
+    setSecurityCode('');
+    navigation.navigate({name: 'MyCards'} as never);
   };
 
   useEffect(() => {
@@ -141,9 +170,10 @@ function NewCard(): JSX.Element {
                 cartão cadastrado com sucesso
               </Text>
               <CreditCard
-                cardNumber={cardNumber}
-                personName={personName}
-                validate={`Validade ${validate}`}
+                cardNumber={createdNewCard.number}
+                personName={createdNewCard.name}
+                validate={`Validade ${createdNewCard.validate}`}
+                typeCard={createdNewCard.typeCard}
               />
               <CustomButton
                 textButton="avançar"

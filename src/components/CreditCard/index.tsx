@@ -1,36 +1,49 @@
 import React from 'react';
 import {View, Text, StyleSheet, ViewStyle} from 'react-native';
 import topography from '../../global/typography';
-import getCustomStyle from '../../global/getCardColor';
 import theme from '../../global/theme';
 
 type CreditCardProps = {
   cardNumber: string;
   validate: string;
   personName: string;
+  typeCard: 'black' | 'green';
   itemStyle?: ViewStyle;
 };
+
 const CreditCard = ({
   cardNumber,
   validate,
   personName,
+  typeCard,
   itemStyle,
 }: CreditCardProps) => {
-  const cardStyle = getCustomStyle();
+  const cardStyles = {
+    black: styles.creditCardBlack,
+    green: styles.creditCardGreen,
+  };
+
+  const cardStylesText = {
+    black: styles.creditCardBlackText,
+    green: styles.creditCardGreenText,
+  };
+
+  const cardTitle = {
+    black: 'Black Card',
+    green: 'Green Card',
+  };
   return (
-    <View
-      style={[styles.creditCard, cardStyle.customStyle.container, itemStyle]}>
-      <Text
-        style={[topography.h5, styles.title, cardStyle.customStyle.cardData]}>
-        {cardStyle.title}
+    <View style={[styles.creditCard, cardStyles[typeCard], itemStyle]}>
+      <Text style={[topography.h5, styles.title, cardStylesText[typeCard]]}>
+        {cardTitle[typeCard]}
       </Text>
-      <Text style={[topography.paragraph, cardStyle.customStyle.cardData]}>
+      <Text style={[topography.paragraph, cardStylesText[typeCard]]}>
         {personName}
       </Text>
-      <Text style={[topography.small, cardStyle.customStyle.cardData]}>
+      <Text style={[topography.small, cardStylesText[typeCard]]}>
         {cardNumber}
       </Text>
-      <Text style={[topography.small, cardStyle.customStyle.cardData]}>
+      <Text style={[topography.small, cardStylesText[typeCard]]}>
         Validade {validate}
       </Text>
     </View>
@@ -50,6 +63,22 @@ const styles = StyleSheet.create({
     color: theme.textColor.white,
     fontFamily: 'Roboto',
     marginBottom: 30,
+  },
+  creditCardBlack: {
+    backgroundColor: theme.textColor.black,
+    borderTopColor: theme.baseColor.greenLight,
+    borderWidth: 0.5,
+  },
+  creditCardBlackText: {
+    color: theme.textColor.white,
+  },
+  creditCardGreen: {
+    backgroundColor: theme.baseColor.greenLight,
+    borderTopColor: theme.textColor.black,
+    borderWidth: 0.5,
+  },
+  creditCardGreenText: {
+    color: theme.textColor.greyDark,
   },
 });
 
