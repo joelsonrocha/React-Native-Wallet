@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   ScrollView,
@@ -19,9 +12,11 @@ import {getCardService} from '../../services';
 import {useNavigation} from '@react-navigation/native';
 import CreditCard from '../../components/CreditCard';
 import topography from '../../global/typography';
+import CustomButton from '../../components/CustomButton';
 function MyCards(): JSX.Element {
   const [cards, setCards] = useState<CardData[]>([]);
   const [cardToUse, setCardToUse] = useState<CardData>();
+  const [selectedCard, setSelectedCard] = useState<CardData>();
   const navigation = useNavigation();
   const getCards = useCallback(async () => {
     try {
@@ -64,10 +59,35 @@ function MyCards(): JSX.Element {
     setCards([...arrayCard]);
   };
 
+  const backMyCards = () => {
+    setSelectedCard(undefined);
+  };
+
   return (
     <View style={styles.container}>
-      <CustomHeaderFat title="Wallet Test" subtitle="Meus cartões" />
+      <CustomHeaderFat
+        title="Wallet Test"
+        subtitle="Meus cartões"
+        onClick={async () => backMyCards()}
+      />
       <View style={styles.body}>
+        {selectedCard && (
+          <View>
+            <CreditCard
+              cardNumber={selectedCard.number}
+              validate={selectedCard.validate}
+              personName={selectedCard.name}
+              typeCard={selectedCard.typeCard}
+            />
+            <CustomButton
+              typeButton="primary"
+              textButton="pagar com este cartão"
+              onClick={async () => {
+                console.log('pagou!!');
+              }}
+            />
+          </View>
+        )}
         <View style={styles.cardContainer}>
           <ScrollView
             showsVerticalScrollIndicator={false}
@@ -97,7 +117,7 @@ function MyCards(): JSX.Element {
           <View style={styles.useCardArea}>
             <TouchableOpacity
               onPress={() => {
-                console.log('usar este cartão', cardToUse);
+                setSelectedCard(cardToUse);
               }}>
               <Text style={[topography.paragraph, styles.textUseCard]}>
                 Usar este cartão

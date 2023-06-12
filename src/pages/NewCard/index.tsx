@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import BaseScreen from '../../global/baseScreen';

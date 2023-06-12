@@ -9,8 +9,9 @@ import theme from '../../global/theme';
 type CustomHeaderFatProps = {
   title: string;
   subtitle: string;
+  onClick?: () => {};
 };
-const CustomHeaderFat = ({title, subtitle}: CustomHeaderFatProps) => {
+const CustomHeaderFat = ({title, subtitle, onClick}: CustomHeaderFatProps) => {
   const navigation = useNavigation();
 
   const handleGoBack = () => {
@@ -42,9 +43,14 @@ const CustomHeaderFat = ({title, subtitle}: CustomHeaderFatProps) => {
         </TouchableOpacity>
       </View>
       <View style={styles.containerDownCustomHeaderFat}>
-        <Text style={[styles.textDownContainerCustomHeaderFat, topography.h4]}>
-          {subtitle}
-        </Text>
+        <TouchableOpacity
+          onPress={() => (onClick ? onClick() : null)}
+          style={styles.buttonMyCards}>
+          <Text
+            style={[styles.textDownContainerCustomHeaderFat, topography.h4]}>
+            {subtitle}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -95,8 +101,13 @@ const styles = StyleSheet.create({
   },
   textDownContainerCustomHeaderFat: {
     color: theme.baseColor.blueLight,
-    flex: 1,
     textAlign: 'center',
+  },
+  buttonMyCards: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
   },
 });
 
