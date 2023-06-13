@@ -1,23 +1,21 @@
 import React from 'react';
-import {View, Text, StyleSheet, ViewStyle} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TouchableOpacity,
+} from 'react-native';
 import topography from '../../global/typography';
 import theme from '../../global/theme';
 
 type CreditCardProps = {
-  cardNumber: string;
-  validate: string;
-  personName: string;
-  typeCard: 'black' | 'green';
+  card: CardData;
+  index?: number;
   itemStyle?: ViewStyle;
 };
 
-const CreditCard = ({
-  cardNumber,
-  validate,
-  personName,
-  typeCard,
-  itemStyle,
-}: CreditCardProps) => {
+const CreditCard = ({card, index, itemStyle}: CreditCardProps) => {
   const cardStyles = {
     black: styles.creditCardBlack,
     green: styles.creditCardGreen,
@@ -33,20 +31,27 @@ const CreditCard = ({
     green: 'Green Card',
   };
   return (
-    <View style={[styles.creditCard, cardStyles[typeCard], itemStyle]}>
-      <Text style={[topography.h5, styles.title, cardStylesText[typeCard]]}>
-        {cardTitle[typeCard]}
-      </Text>
-      <Text style={[topography.paragraph, cardStylesText[typeCard]]}>
-        {personName}
-      </Text>
-      <Text style={[topography.small, cardStylesText[typeCard]]}>
-        {cardNumber}
-      </Text>
-      <Text style={[topography.small, cardStylesText[typeCard]]}>
-        Validade {validate}
-      </Text>
-    </View>
+    <TouchableOpacity
+      style={{borderWidth: 1, borderColor: 'red'}}
+      onPress={() => {
+        console.log('cartão clicado', card);
+      }}>
+      <View style={[styles.creditCard, cardStyles[card.typeCard], itemStyle]}>
+        <Text
+          style={[topography.h5, styles.title, cardStylesText[card.typeCard]]}>
+          {cardTitle[card.typeCard]}
+        </Text>
+        <Text style={[topography.paragraph, cardStylesText[card.typeCard]]}>
+          {card.name}
+        </Text>
+        <Text style={[topography.small, cardStylesText[card.typeCard]]}>
+          {card.number}
+        </Text>
+        <Text style={[topography.small, cardStylesText[card.typeCard]]}>
+          Validade {card.validate}
+        </Text>
+      </View>
+    </TouchableOpacity>
   );
 };
 
