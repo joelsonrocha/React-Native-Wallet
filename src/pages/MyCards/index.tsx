@@ -12,49 +12,40 @@ import {
 } from 'react-native';
 import theme from '../../global/theme';
 import CustomHeaderFat from '../../components/CustomHeaderFat';
-import {getCardService} from '../../services';
-import {useNavigation} from '@react-navigation/native';
 import CreditCard from '../../components/CreditCard';
 import topography from '../../global/typography';
 import CustomButton from '../../components/CustomButton';
+
+import {
+  addCardToUse,
+  cardsState,
+  cardsToUseState,
+  selectCard,
+  selectCardsState,
+} from '../../store/cards/cardSlice';
+import {useDispatch, useSelector} from 'react-redux';
 
 function MyCards(): JSX.Element {
   const scrollViewRef = useRef<ScrollView>(null);
   const y = useRef(new Animated.Value(0)).current;
   const [isScrollEnabled, setScrollEnabled] = useState(true);
-  const [cards, setCards] = useState<CardData[]>([]);
-  const [cardToUse, setCardToUse] = useState<CardData>();
-  const [selectedCard, setSelectedCard] = useState<CardData>();
-  const navigation = useNavigation();
-
-  const getCards = useCallback(async () => {
-    try {
-      const result = await getCardService.getCards();
-      setCards(result);
-    } catch (error) {
-      console.log('Erro ao buscar cartões', error);
-    }
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      getCards();
-    });
-    return unsubscribe;
-  }, [navigation, getCards]);
+  const cards = useSelector(cardsState);
+  const selectedCard = useSelector(selectCardsState);
+  const cardToUse = useSelector(cardsToUseState);
+  const dispatch = useDispatch();
 
   const prepareCardToUse = useCallback(() => {
     if (cards.length) {
-      setCardToUse(cards[cards.length - 1]);
+      dispatch(addCardToUse(cards[cards.length - 1]));
     }
-  }, [cards]);
+  }, [cards, dispatch]);
 
   useEffect(() => {
     prepareCardToUse();
-  }, [cards, prepareCardToUse]);
+  }, [prepareCardToUse]);
 
   const backMyCards = () => {
-    setSelectedCard(undefined);
+    dispatch(selectCard(undefined));
   };
 
   const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -132,7 +123,7 @@ function MyCards(): JSX.Element {
           <View style={styles.useCardArea}>
             <TouchableOpacity
               onPress={() => {
-                setSelectedCard(cardToUse);
+                dispatch(selectCard(cardToUse));
               }}>
               <Text style={[topography.paragraph, styles.textUseCard]}>
                 Usar este cartão

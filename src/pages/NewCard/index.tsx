@@ -43,7 +43,8 @@ function NewCard(): JSX.Element {
       createdNewCard?.cvv &&
       createdNewCard.name &&
       createdNewCard.number &&
-      createdNewCard.name
+      createdNewCard.name &&
+      createdNewCard.typeCard
     ) {
       async function saveData() {
         if (createdNewCard) {
@@ -162,12 +163,7 @@ function NewCard(): JSX.Element {
               <Text style={[topography.h4, styles.title]}>
                 cartão cadastrado com sucesso
               </Text>
-              <CreditCard
-                cardNumber={createdNewCard.number}
-                personName={createdNewCard.name}
-                validate={`Validade ${createdNewCard.validate}`}
-                typeCard={createdNewCard.typeCard}
-              />
+              <CreditCard card={createdNewCard} />
               <CustomButton
                 textButton="avançar"
                 onClick={() => handleContinue()}

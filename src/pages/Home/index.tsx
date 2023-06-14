@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import BaseScreen from '../../global/baseScreen';
@@ -8,6 +8,9 @@ import theme from '../../global/theme';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RouteProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../routes';
+import {useDispatch} from 'react-redux';
+import {addCards} from '../../store/cards/cardSlice';
+import {getCardService} from '../../services';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -15,6 +18,7 @@ type Props = {
 };
 
 function Home({navigation}: Props): JSX.Element {
+  const dispatch = useDispatch();
   useEffect(() => {
     SplashScreen.hide();
   });
@@ -26,6 +30,22 @@ function Home({navigation}: Props): JSX.Element {
   const ToNewCard = async () => {
     navigation.navigate('NewCard');
   };
+
+  const getCards = useCallback(async () => {
+    try {
+      const result = await getCardService.getCards();
+      dispatch(addCards(result));
+    } catch (error) {
+      console.log('Erro ao buscar cartões', error);
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      getCards();
+    });
+    return unsubscribe;
+  }, [navigation, getCards]);
 
   return (
     <BaseScreen>
