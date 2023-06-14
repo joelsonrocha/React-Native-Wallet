@@ -3,13 +3,18 @@ jest.mock('react-native-splash-screen', () => ({
   hide: jest.fn(),
 }));
 
-jest.mock('@react-navigation/native', () => {
-  return {
-    useNavigation: () => ({
-      navigate: jest.fn(),
-    }),
-    useRoute: () => ({
-      params: {},
-    }),
-  };
+jest.mock('react-native/Libraries/Utilities/BackHandler', () => {
+  return jest.requireActual(
+    'react-native/Libraries/Utilities/__mocks__/BackHandler.js',
+  );
 });
+
+const mockNavigation = jest.fn();
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => {
+    return mockNavigation;
+  },
+}));
+
+jest.useFakeTimers();
