@@ -24,6 +24,7 @@ import {
   selectCardsState,
 } from '../../store/cards/cardSlice';
 import {useDispatch, useSelector} from 'react-redux';
+import LoadingScreen from '../../components/LoadingScreen';
 
 function MyCards(): JSX.Element {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -65,6 +66,10 @@ function MyCards(): JSX.Element {
       console.log('Arrastando para baixo');
     }
   };
+
+  if (!cards) {
+    return <LoadingScreen />;
+  }
 
   return (
     <View style={styles.container}>
