@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import BaseScreen from '../../global/baseScreen';
 import topography from '../../global/typography';
@@ -10,15 +10,70 @@ import CustomButton from '../../components/CustomButton';
 import {saveCardService} from '../../services';
 import CreditCard from '../../components/CreditCard';
 import {useNavigation} from '@react-navigation/native';
+import * as yup from 'yup';
+import {useForm, Controller} from 'react-hook-form';
+import {yupResolver} from '@hookform/resolvers/yup';
+import 'react-native-get-random-values';
+import {v4 as uuidv4} from 'uuid';
 
 function NewCard(): JSX.Element {
-  const [cardNumber, setCardNumber] = useState('');
-  const [personName, setPersonName] = useState('');
-  const [validate, setValidate] = useState('');
-  const [securityCode, setSecurityCode] = useState('');
-  const [disableButton, setDisableButton] = useState(true);
   const [createdNewCard, setCreatedNewCard] = useState<CardData | null>(null);
   const navigation = useNavigation();
+
+  const schema = yup.object().shape({
+    name: yup.string().required('Nome do titular é obrigatório'),
+    number: yup.string().required('Número do cartão é obrigatório'),
+    cvv: yup.string().required('Código de segurança é obrigatório'),
+    validate: yup
+      .string()
+      .required('Vencimento é obrigatório')
+      .matches(/^(0[1-9]|1[0-2])\/(\d{2})$/, 'Vencimento inválido'),
+    typeCard: yup.string(),
+  });
+
+  const {
+    handleSubmit,
+    control,
+    formState: {errors, isValid},
+    reset,
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      name: '',
+      number: '',
+      cvv: '',
+      validate: '',
+      typeCard: '',
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    const cardData: CardData = {
+      id: uuidv4(),
+      name: data.name,
+      number: data.number,
+      cvv: data.cvv,
+      validate: data.validate,
+      typeCard: typeCreditCard() as 'black' | 'green',
+    };
+    await saveCardService.saveCard(cardData);
+    setCreatedNewCard(cardData);
+    reset();
+  };
+
+  const creditCardMask = (value: string) => {
+    let maskedText = value.replace(/\D/g, '');
+    maskedText = maskedText.replace(/(\d{4})(?=\d)/g, '$1 ');
+
+    return maskedText;
+  };
+
+  const validateMask = (value: string) => {
+    let maskedText = value.replace(/\D/g, '');
+    maskedText = maskedText.replace(/(\d{2})(\d{2})/, '$1/$2');
+
+    return maskedText;
+  };
 
   const typeCreditCard = () => {
     const typeCard = ['black', 'green'];
@@ -26,52 +81,9 @@ function NewCard(): JSX.Element {
     return typeCard[ramdomIndex];
   };
 
-  const saveCard = async () => {
-    if (cardNumber && personName && validate && securityCode) {
-      setCreatedNewCard({
-        number: cardNumber,
-        cvv: securityCode,
-        name: personName,
-        validate: validate,
-        typeCard: typeCreditCard() as 'black' | 'green',
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (
-      createdNewCard?.cvv &&
-      createdNewCard.name &&
-      createdNewCard.number &&
-      createdNewCard.name &&
-      createdNewCard.typeCard
-    ) {
-      async function saveData() {
-        if (createdNewCard) {
-          await saveCardService.saveCard(createdNewCard);
-        }
-      }
-      saveData();
-    }
-  }, [createdNewCard]);
-
   const handleContinue = async () => {
-    console.log('handleContinue');
-    setCreatedNewCard(null);
-    setCardNumber('');
-    setPersonName('');
-    setValidate('');
-    setSecurityCode('');
     navigation.navigate({name: 'MyCards'} as never);
   };
-
-  useEffect(() => {
-    if (cardNumber && personName && validate && securityCode) {
-      setDisableButton(false);
-    } else {
-      setDisableButton(true);
-    }
-  }, [cardNumber, personName, validate, securityCode]);
 
   return (
     <BaseScreen>
@@ -86,16 +98,30 @@ function NewCard(): JSX.Element {
                   Número do cartão
                 </Text>
                 <View style={styles.viewInputCardNumber}>
-                  <TextInput
-                    style={[
-                      topography.paragraph,
-                      styles.input,
-                      styles.inputCardNumber,
-                    ]}
-                    onChangeText={setCardNumber}
-                    value={cardNumber}
-                    keyboardType="numeric"
-                    maxLength={16}
+                  <Controller
+                    control={control}
+                    name="number"
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <View>
+                        <TextInput
+                          style={[
+                            topography.paragraph,
+                            styles.input,
+                            styles.inputCardNumber,
+                          ]}
+                          onBlur={onBlur}
+                          onChangeText={text => onChange(creditCardMask(text))}
+                          value={value}
+                          keyboardType="numeric"
+                          maxLength={19}
+                        />
+                        {errors.number && (
+                          <Text style={styles.error}>
+                            {errors.number.message}
+                          </Text>
+                        )}
+                      </View>
+                    )}
                   />
                   <View style={styles.elipse}>
                     <SvgXml xml={CameraIcon} />
@@ -106,12 +132,22 @@ function NewCard(): JSX.Element {
                 <Text style={[topography.small, styles.label]}>
                   Nome do titular do cartão
                 </Text>
-                <TextInput
-                  style={[topography.paragraph, styles.input]}
-                  onChangeText={setPersonName}
-                  value={personName}
-                  keyboardType="default"
-                  maxLength={16}
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({field: {onChange, onBlur, value}}) => (
+                    <View>
+                      <TextInput
+                        style={[topography.paragraph, styles.input]}
+                        onBlur={onBlur}
+                        onChangeText={onChange}
+                        value={value}
+                      />
+                      {errors.name && (
+                        <Text style={styles.error}>{errors.name.message}</Text>
+                      )}
+                    </View>
+                  )}
                 />
               </View>
               <View style={styles.containerMiniIputs}>
@@ -119,42 +155,68 @@ function NewCard(): JSX.Element {
                   <Text style={[topography.small, styles.label]}>
                     Vencimento
                   </Text>
-                  <TextInput
-                    style={[
-                      topography.paragraph,
-                      styles.input,
-                      styles.miniInput,
-                    ]}
-                    onChangeText={setValidate}
-                    value={validate}
-                    placeholder="00/00"
-                    keyboardType="numeric"
-                    maxLength={16}
+                  <Controller
+                    control={control}
+                    name="validate"
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <View>
+                        <TextInput
+                          style={[
+                            topography.paragraph,
+                            styles.input,
+                            styles.miniInput,
+                          ]}
+                          onBlur={onBlur}
+                          onChangeText={text => onChange(validateMask(text))}
+                          value={value}
+                          placeholder="00/00"
+                          keyboardType="numeric"
+                          maxLength={5}
+                        />
+                        {errors.validate && (
+                          <Text style={styles.error}>
+                            {errors.validate.message}
+                          </Text>
+                        )}
+                      </View>
+                    )}
                   />
                 </View>
                 <View style={styles.inputContainer}>
                   <Text style={[topography.small, styles.label]}>
                     Código de segurança
                   </Text>
-                  <TextInput
-                    style={[
-                      topography.paragraph,
-                      styles.input,
-                      styles.miniInput,
-                    ]}
-                    onChangeText={setSecurityCode}
-                    value={securityCode}
-                    placeholder="***"
-                    keyboardType="numeric"
-                    maxLength={16}
+                  <Controller
+                    control={control}
+                    name="cvv"
+                    render={({field: {onChange, onBlur, value}}) => (
+                      <View>
+                        <TextInput
+                          style={[
+                            topography.paragraph,
+                            styles.input,
+                            styles.miniInput,
+                          ]}
+                          onBlur={onBlur}
+                          onChangeText={onChange}
+                          value={value}
+                          placeholder="***"
+                          keyboardType="numeric"
+                          maxLength={4}
+                        />
+                        {errors.cvv && (
+                          <Text style={styles.error}>{errors.cvv.message}</Text>
+                        )}
+                      </View>
+                    )}
                   />
                 </View>
               </View>
               <CustomButton
                 textButton="avançar"
-                onClick={() => saveCard()}
-                typeButton={disableButton ? 'disabled' : 'primary'}
-                disabled={disableButton}
+                onClick={handleSubmit(onSubmit)}
+                typeButton={!isValid ? 'disabled' : 'primary'}
+                disabled={!isValid}
               />
             </View>
           )}
@@ -184,7 +246,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.baseColor.blueDark,
     justifyContent: 'flex-start',
   },
-  form: {},
+  form: {
+    width: 310,
+    justifyContent: 'center',
+  },
   title: {
     color: theme.textColor.white,
     fontFamily: 'Roboto',
@@ -245,7 +310,7 @@ const styles = StyleSheet.create({
     width: 310,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
   success: {},
   creditCard: {
@@ -255,6 +320,10 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     paddingLeft: 15,
     marginBottom: 30,
+  },
+  error: {
+    color: theme.alert.red,
+    fontSize: 13,
   },
 });
 

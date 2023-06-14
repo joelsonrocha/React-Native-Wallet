@@ -61,11 +61,6 @@ function Home({navigation}: Props): JSX.Element {
           typeButton="secondary"
           onClick={() => ToNewCard()}
         />
-        <CustomButton
-          textButton="modal"
-          typeButton="secondary"
-          onClick={() => ShowModal()}
-        />
       </View>
     </BaseScreen>
   );
