@@ -7,7 +7,7 @@ import store from './store';
 function App(): JSX.Element {
   useEffect(() => {
     SplashScreen.hide();
-  });
+  }, []);
 
   return (
     <Provider store={store}>

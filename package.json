@@ -11,7 +11,6 @@
     "api": "json-server --watch db.json --port 3004",
     "clean:android": "rm -rf android/app/build && rm -rf android/app/.cxx && rm -rf android/build && rm -rf android/.gradle && rm -rf android/build.gradle-e && cd android && ./gradlew clean",
     "clean:ios": "rm -rf ios/build && rm -rf ios/Podfile.lock && rm -rf ios/Pods && rm -rf ios/VRWallet.xcworkspace",
-    "build": "yarn && yarn build:android && yarn build:ios",
     "build:ios": "cd ios/ && pod install",
     "clean:deps": "rm -rf node_modules yarn.lock",
     "clean:cache": "yarn cache clean -f"
