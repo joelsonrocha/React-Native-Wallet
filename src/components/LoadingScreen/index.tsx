@@ -1,13 +1,5 @@
 import React, {useCallback, useEffect, useRef} from 'react';
-import {
-  View,
-  StyleSheet,
-  Image,
-  Modal,
-  Alert,
-  Animated,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, Image, Animated, Dimensions} from 'react-native';
 import theme from '../../global/theme';
 
 const windowWidth = Dimensions.get('window').width;
@@ -92,48 +84,40 @@ const LoadingScreen = () => {
   };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={true}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-      }}>
-      <View style={styles.container}>
-        <Animated.View
-          style={[
-            styles.elementBackgroundUp,
-            {
-              transform: [
-                {translateX: translateUpValue.x},
-                {translateY: translateUpValue.y},
-                {rotate: interpolatedRotate},
-              ],
-            },
-          ]}
-        />
-        <View style={styles.center}>
-          <Animated.View style={[styles.iconContainer, animatedImage]}>
-            <Image
-              source={require('../../assets/icon.png')}
-              style={[styles.icon]}
-            />
-          </Animated.View>
-        </View>
-        <Animated.View
-          style={[
-            styles.elementBackgroundDown,
-            {
-              transform: [
-                {translateX: translateDownValue.x},
-                {translateY: translateDownValue.y},
-                {rotate: interpolatedRotate},
-              ],
-            },
-          ]}
-        />
+    <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.elementBackgroundUp,
+          {
+            transform: [
+              {translateX: translateUpValue.x},
+              {translateY: translateUpValue.y},
+              {rotate: interpolatedRotate},
+            ],
+          },
+        ]}
+      />
+      <View style={styles.center}>
+        <Animated.View style={[styles.iconContainer, animatedImage]}>
+          <Image
+            source={require('../../assets/icon.png')}
+            style={[styles.icon]}
+          />
+        </Animated.View>
       </View>
-    </Modal>
+      <Animated.View
+        style={[
+          styles.elementBackgroundDown,
+          {
+            transform: [
+              {translateX: translateDownValue.x},
+              {translateY: translateDownValue.y},
+              {rotate: interpolatedRotate},
+            ],
+          },
+        ]}
+      />
+    </View>
   );
 };
 

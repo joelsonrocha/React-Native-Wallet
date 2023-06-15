@@ -25,6 +25,7 @@ import {
 } from '../../store/cards/cardSlice';
 import {useDispatch, useSelector} from 'react-redux';
 import LoadingScreen from '../../components/LoadingScreen';
+import Wallet from '../../components/Wallet';
 
 function MyCards(): JSX.Element {
   const scrollViewRef = useRef<ScrollView>(null);
@@ -58,13 +59,13 @@ function MyCards(): JSX.Element {
     console.log('contentSize', contentSize.height);
     const heightTotal = cards.length * 30 + 180 - 30;
     console.log('heightTotal', heightTotal);
-    if (contentOffset.y >= 70) {
+    /* if (contentOffset.y >= 70) {
       setScrollEnabled(false);
       console.log('Arrastando para baixo chegou no final');
     } else if (contentOffset.y < 0) {
       setScrollEnabled(true);
       console.log('Arrastando para baixo');
-    }
+    } */
   };
 
   if (!cards) {
@@ -79,8 +80,9 @@ function MyCards(): JSX.Element {
         onClick={async () => backMyCards()}
       />
       <View style={styles.body}>
+        {/* <Wallet /> */}
         {selectedCard && (
-          <View>
+          <View style={styles.selectedCardContainer}>
             <CreditCard card={selectedCard} />
             <CustomButton
               typeButton="primary"
@@ -91,7 +93,11 @@ function MyCards(): JSX.Element {
             />
           </View>
         )}
-        <View style={styles.cardContainer}>
+        <View
+          style={[
+            styles.cardContainer,
+            selectedCard ? styles.cardContainerOpacity : null,
+          ]}>
           <ScrollView
             ref={scrollViewRef}
             scrollEnabled={isScrollEnabled}
@@ -169,12 +175,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  selectedCardContainer: {
+    marginTop: 297,
+    height: 400,
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   cardContainer: {
     marginTop: 50,
     height: 400,
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  cardContainerOpacity: {
+    opacity: 0.5,
   },
   scrollViewContent: {
     paddingBottom: 0,

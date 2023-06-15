@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 import BaseScreen from '../../global/baseScreen';
@@ -11,6 +11,7 @@ import {RootStackParamList} from '../../routes';
 import {useDispatch} from 'react-redux';
 import {addCards} from '../../store/cards/cardSlice';
 import {getCardService} from '../../services';
+import LoadingScreen from '../../components/LoadingScreen';
 
 type Props = {
   navigation: NativeStackNavigationProp<RootStackParamList, 'Home'>;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 function Home({navigation}: Props): JSX.Element {
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   useEffect(() => {
     SplashScreen.hide();
@@ -32,11 +34,20 @@ function Home({navigation}: Props): JSX.Element {
   };
 
   const getCards = useCallback(async () => {
+    setLoading(true);
     try {
       const result = await getCardService.getCards();
       dispatch(addCards(result));
     } catch (error) {
       console.log('Erro ao buscar cartões', error);
+    } finally {
+      /*
+      setTimeout para mostrar o loading, como faz parte de uma exibição, 
+      faz sentido mostrar, mas em situação real, deverá considerar só o tempo do request
+      */
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
     }
   }, [dispatch]);
 
@@ -47,7 +58,9 @@ function Home({navigation}: Props): JSX.Element {
     return unsubscribe;
   }, [navigation, getCards]);
 
-  return (
+  return loading ? (
+    <LoadingScreen />
+  ) : (
     <BaseScreen>
       <View style={styles.container}>
         <Text style={[topography.h1, styles.title]}>Wallet Test</Text>

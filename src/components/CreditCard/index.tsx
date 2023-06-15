@@ -84,16 +84,12 @@ const styles = StyleSheet.create({
   },
   creditCardBlack: {
     backgroundColor: theme.textColor.black,
-    borderTopColor: theme.baseColor.greenLight,
-    borderWidth: 0.5,
   },
   creditCardBlackText: {
     color: theme.textColor.white,
   },
   creditCardGreen: {
     backgroundColor: theme.baseColor.greenLight,
-    borderTopColor: theme.textColor.black,
-    borderWidth: 0.5,
   },
   creditCardGreenText: {
     color: theme.textColor.greyDark,

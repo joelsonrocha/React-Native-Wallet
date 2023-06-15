@@ -18,3 +18,6 @@ jest.mock('@react-navigation/native', () => ({
 }));
 
 jest.useFakeTimers();
+
+const mockUUID = 'mocked-uuid';
+jest.mock('uuid', () => ({v4: () => mockUUID}));

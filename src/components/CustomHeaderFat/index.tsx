@@ -15,12 +15,10 @@ const CustomHeaderFat = ({title, subtitle, onClick}: CustomHeaderFatProps) => {
   const navigation = useNavigation();
 
   const handleGoBack = () => {
-    console.log('go back');
     navigation.goBack();
   };
 
   const AddNewCard = () => {
-    console.log('add new card');
     navigation.navigate({name: 'NewCard'} as never);
   };
 
