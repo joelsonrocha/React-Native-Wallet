@@ -15,6 +15,8 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 
 ### :computer: Rodando o Back End (servidor)
 
+Caminho do servidor(API)(baseUrl) pode ser ajustado aqui: src/global/httpClient.ts
+
 ```bash
 # Clone este repositório
 $ git clone <https://github.com/joelsonrocha/VR-Wallet.git>
@@ -36,3 +38,6 @@ $ yarn api
 # Na mesma pasta onde está rodando o servidor, mas com outro terminal
 $ yarn android
 ```
+
+Não tá terminado, não ficou do jeito que eu gostaria.
+Foi feito com react-native na versão 0.71, e usando a nova arquitetura.
