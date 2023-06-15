@@ -9,7 +9,7 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import CustomButton from '..';
 
-it('renders correctly', () => {
+it('renders CustomButton', () => {
   const eventClick = async () => {
     console.log('click');
   };

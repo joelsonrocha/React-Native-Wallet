@@ -1,9 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {
-  Animated,
   Image,
-  NativeScrollEvent,
-  NativeSyntheticEvent,
   ScrollView,
   StyleSheet,
   Text,
@@ -24,12 +21,9 @@ import {
   selectCardsState,
 } from '../../store/cards/cardSlice';
 import {useDispatch, useSelector} from 'react-redux';
-import LoadingScreen from '../../components/LoadingScreen';
-import Wallet from '../../components/Wallet';
 
 function MyCards(): JSX.Element {
   const scrollViewRef = useRef<ScrollView>(null);
-  const y = useRef(new Animated.Value(0)).current;
   const [isScrollEnabled, setScrollEnabled] = useState(true);
   const cards = useSelector(cardsState);
   const selectedCard = useSelector(selectCardsState);
@@ -50,28 +44,6 @@ function MyCards(): JSX.Element {
     dispatch(selectCard(undefined));
   };
 
-  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const {contentOffset, contentSize} = event.nativeEvent;
-    const scrollY = contentOffset.y;
-    y.setValue(scrollY);
-
-    console.log('contentOffset', contentOffset);
-    console.log('contentSize', contentSize.height);
-    const heightTotal = cards.length * 30 + 180 - 30;
-    console.log('heightTotal', heightTotal);
-    /* if (contentOffset.y >= 70) {
-      setScrollEnabled(false);
-      console.log('Arrastando para baixo chegou no final');
-    } else if (contentOffset.y < 0) {
-      setScrollEnabled(true);
-      console.log('Arrastando para baixo');
-    } */
-  };
-
-  if (!cards) {
-    return <LoadingScreen />;
-  }
-
   return (
     <View style={styles.container}>
       <CustomHeaderFat
@@ -80,7 +52,6 @@ function MyCards(): JSX.Element {
         onClick={async () => backMyCards()}
       />
       <View style={styles.body}>
-        {/* <Wallet /> */}
         {selectedCard && (
           <View style={styles.selectedCardContainer}>
             <CreditCard card={selectedCard} />
@@ -102,8 +73,7 @@ function MyCards(): JSX.Element {
             ref={scrollViewRef}
             scrollEnabled={isScrollEnabled}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.scrollViewContent}
-            onScroll={handleScroll}>
+            contentContainerStyle={styles.scrollViewContent}>
             {cards.map((item, index) => {
               const zIndex = cards.length + index;
               const bottom = index * 150;
@@ -164,7 +134,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: theme.textColor.white,
-    fontFamily: 'Roboto',
     marginBottom: 30,
   },
   subtitle: {

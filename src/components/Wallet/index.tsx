@@ -1,67 +1,19 @@
 import React, {useRef} from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  Animated,
-  SafeAreaView,
-  Dimensions,
-  TouchableOpacity,
-  Pressable,
-  PanResponder,
-} from 'react-native';
+import {StyleSheet, View, Animated, Dimensions} from 'react-native';
+import {useSelector} from 'react-redux';
+import {cardsState} from '../../store/cards/cardSlice';
+import CreditCard from '../CreditCard';
 
-const cardHeight = 144;
-const cardTitle = 45;
+const cardHeight = 190;
+const cardTitle = 80;
 const cardPadding = 10;
 
 const {height} = Dimensions.get('window');
 const {width} = Dimensions.get('window');
-const cards = [
-  {
-    name: 'Shot',
-    color: '#a9d0b6',
-    price: '30 CHF',
-  },
-  {
-    name: 'Juice',
-    color: '#e9bbd1',
-    price: '64 CHF',
-  },
-  {
-    name: 'Mighty Juice',
-    color: '#eba65c',
-    price: '80 CHF',
-  },
-  {
-    name: 'Sandwich',
-    color: '#95c3e4',
-    price: '85 CHF',
-  },
-  {
-    name: 'Combi',
-    color: '#1c1c1c',
-    price: '145 CHF',
-  },
-  {
-    name: 'Signature',
-    color: '#a390bc',
-    price: '92 CHF',
-  },
-  {
-    name: 'Coffee',
-    color: '#fef2a0',
-    price: '47 CHF',
-  },
-];
 
 const Wallet: React.FC = () => {
+  const cards = useSelector(cardsState);
   const y = useRef(new Animated.Value(0)).current;
-  const AnimateTouchable = Animated.createAnimatedComponent(TouchableOpacity);
-  const handleCardPress = (cardName: string) => {
-    console.log('Clicou no card', cardName);
-  };
   const renderCards = () => {
     return cards.map((card, i) => {
       const inputRange = [-cardHeight, 0];
@@ -78,7 +30,7 @@ const Wallet: React.FC = () => {
 
       return (
         <Animated.View
-          key={card.name}
+          key={card.id}
           style={[
             styles.cardContainer,
             {
@@ -86,9 +38,7 @@ const Wallet: React.FC = () => {
               transform: [{translateY}],
             },
           ]}>
-          <AnimateTouchable onPress={() => handleCardPress(card.name)}>
-            <View style={[styles.card, {backgroundColor: card.color}]} />
-          </AnimateTouchable>
+          <CreditCard card={card} />
         </Animated.View>
       );
     });
@@ -127,7 +77,12 @@ const styles = StyleSheet.create({
   content: {
     height: height * 2,
   },
-  cardContainer: {},
+  cardContainer: {
+    marginTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
   card: {
     height: cardHeight,
     borderRadius: 10,

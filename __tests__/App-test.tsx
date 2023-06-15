@@ -11,7 +11,7 @@ import renderer from 'react-test-renderer';
 import {Provider} from 'react-redux';
 import store from '../src/store';
 
-it('renders correctly', () => {
+it('renders App', () => {
   renderer.create(
     <Provider store={store}>
       <App />

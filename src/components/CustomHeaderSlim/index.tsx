@@ -28,22 +28,23 @@ const CustomHeaderSlim = ({title}: CustomHeaderSlimProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     width: '100%',
-    height: 24,
-    marginTop: 21,
+    height: 45,
     position: 'relative',
     zIndex: 99,
+    top: 0,
+    left: 0,
+    right: 0,
   },
   buttonContainer: {
     position: 'absolute',
     height: 39,
     width: 39,
     borderRadius: 18.5,
-    top: 6,
-    left: 12,
+    top: 22,
+    left: 20,
   },
   textContainer: {
     color: theme.baseColor.blueLight,

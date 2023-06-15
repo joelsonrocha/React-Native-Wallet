@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: theme.textColor.white,
-    fontFamily: 'Roboto',
     marginBottom: 30,
   },
   creditCardBlack: {

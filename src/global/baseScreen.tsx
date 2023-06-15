@@ -10,7 +10,7 @@ const BaseScreen = ({children}: BaseScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.elementBackgroundUp} />
-      {children}
+      <View style={styles.contentContainer}>{children}</View>
       <View style={styles.elementBackgroundDown} />
     </View>
   );
@@ -21,10 +21,15 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.baseColor.blueDark,
     position: 'relative',
+    flexDirection: 'column',
+  },
+  contentContainer: {
+    flex: 1,
+    zIndex: 999,
   },
   elementBackgroundUp: {
-    backgroundColor: theme.baseColor.greyLight,
     position: 'absolute',
+    backgroundColor: theme.baseColor.greyLight,
     width: 349.21,
     height: 235.27,
     top: -90,
@@ -35,8 +40,8 @@ const styles = StyleSheet.create({
     transform: [{rotate: '145deg'}],
   },
   elementBackgroundDown: {
-    backgroundColor: theme.baseColor.greyLight,
     position: 'absolute',
+    backgroundColor: theme.baseColor.greyLight,
     width: 349.21,
     height: 235.27,
     bottom: -90,

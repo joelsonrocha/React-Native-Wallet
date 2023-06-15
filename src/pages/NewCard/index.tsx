@@ -252,7 +252,6 @@ const styles = StyleSheet.create({
   },
   title: {
     color: theme.textColor.white,
-    fontFamily: 'Roboto',
     marginBottom: 30,
   },
   subtitle: {
@@ -288,7 +287,6 @@ const styles = StyleSheet.create({
   inputCardNumber: {
     position: 'relative',
     paddingLeft: 52,
-    fontFamily: 'PT Sans',
   },
   viewInputCardNumber: {
     flexDirection: 'row',
