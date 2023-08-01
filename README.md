@@ -1,4 +1,4 @@
-# Projeto de avaliação VR-Wallet
+# Projeto React-Native-Wallet
 
 ## Criado com react native e usando a api https://jsonplaceholder.typicode.com
 
