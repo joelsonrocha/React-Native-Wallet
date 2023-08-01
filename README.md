@@ -19,10 +19,10 @@ Caminho do servidor(API)(baseUrl) pode ser ajustado aqui: src/global/httpClient.
 
 ```bash
 # Clone este repositório
-$ git clone <https://github.com/joelsonrocha/VR-Wallet.git>
+$ git clone <https://github.com/joelsonrocha/React-Native-Wallet.git>
 
 # Acesse a pasta do projeto no terminal/cmd
-$ cd VR-Wallet
+$ cd React-Native-Wallet
 
 # Instale as dependências
 $ yarn
